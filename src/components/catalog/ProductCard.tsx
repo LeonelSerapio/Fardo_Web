@@ -2,9 +2,10 @@
 
 import React from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { FardoProduct } from '@/types';
 import { formatArs, formatUnitCost } from '@/lib/formatters';
-import { Scale, Layers, Check, ShoppingBag, MessageCircle } from 'lucide-react';
+import { Scale, Layers, Check, ShoppingBag, MessageCircle, ExternalLink } from 'lucide-react';
 
 interface ProductCardProps {
   product: FardoProduct;
@@ -44,7 +45,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
   return (
     <article className="group bg-white rounded-2xl border border-[#e7e0d2] hover:border-[#c40506]/50 transition-all flex flex-col overflow-hidden shadow-sm hover:shadow-md">
       {/* Image Header */}
-      <div className="relative aspect-[4/3] w-full overflow-hidden bg-[#eae3d2]">
+      <Link href={`/fardos/${product.id}`} className="relative aspect-[4/3] w-full overflow-hidden bg-[#eae3d2] block">
         <Image
           src={product.image}
           alt={product.title}
@@ -81,14 +82,16 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }
             Flete directo
           </span>
         </div>
-      </div>
+      </Link>
 
       {/* Content */}
       <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
         <div>
-          <h3 className="font-serif-heading font-bold text-base sm:text-lg text-[#19150b] group-hover:text-[#c40506] transition-colors line-clamp-2">
-            {product.title}
-          </h3>
+          <Link href={`/fardos/${product.id}`} className="block">
+            <h3 className="font-serif-heading font-bold text-base sm:text-lg text-[#19150b] group-hover:text-[#c40506] transition-colors line-clamp-2">
+              {product.title}
+            </h3>
+          </Link>
 
           {/* Technical Specs */}
           <div className="mt-3 grid grid-cols-2 gap-2 bg-[#f8f5ec] p-2.5 rounded-xl border border-[#e7e0d2] text-xs">
