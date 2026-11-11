@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
@@ -32,8 +33,12 @@ export async function generateStaticParams() {
   }));
 }
 
-export default async function FardoDetailPage({ params }: PageProps) {
-  const { id } = await params;
+async function FardoDetailContent({
+  paramsPromise,
+}: {
+  paramsPromise: Promise<{ id: string }>;
+}) {
+  const { id } = await paramsPromise;
   const fardo = await fardoRepository.findById(id);
 
   if (!fardo) {
@@ -49,4 +54,26 @@ export default async function FardoDetailPage({ params }: PageProps) {
   const relatedFardos = categoryFardos.filter((item) => item.id !== fardo.id).slice(0, 3);
 
   return <FardoDetailClient fardo={fardo} relatedFardos={relatedFardos} />;
+}
+
+function FardoDetailSkeleton() {
+  return (
+    <div className="min-h-screen bg-[#f8f5ec] py-12 px-4 sm:px-6 lg:px-8 animate-pulse">
+      <div className="max-w-7xl mx-auto space-y-8">
+        <div className="h-5 bg-[#e7e0d2] rounded w-64" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+          <div className="lg:col-span-7 aspect-[4/3] bg-[#e7e0d2] rounded-2xl" />
+          <div className="lg:col-span-5 h-[420px] bg-[#e7e0d2] rounded-2xl" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function FardoDetailPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<FardoDetailSkeleton />}>
+      <FardoDetailContent paramsPromise={params} />
+    </Suspense>
+  );
 }

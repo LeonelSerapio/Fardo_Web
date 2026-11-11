@@ -14,12 +14,12 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
 
   return (
     <header className="sticky top-0 z-50 bg-[#f8f5ec]/95 backdrop-blur-md border-b border-[#e7e0d2] text-[#19150b]">
-      {/* Top Red Bar - Figma exact */}
+      {/* Top Red Bar */}
       <div className="bg-[#cd0102] text-white text-[11px] sm:text-xs py-1.5 px-4 font-medium tracking-wide">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <span>ENVÍOS A TODA ARGENTINA - DESPACHO DIRECTO DESDE DEPÓSITO</span>
           <div className="hidden sm:flex items-center gap-3">
-            <span>Compra segura</span>
+            <span>Compra mayorista segura</span>
             <span>•</span>
             <a
               href="https://wa.me/5491112345678"
@@ -45,33 +45,44 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
           </span>
         </Link>
 
-        {/* Desktop Links - Figma exact */}
+        {/* Desktop Useful Navigation Links */}
         <div className="hidden lg:flex items-center gap-8 text-[13px] font-semibold text-[#19150b]/80">
-          <a href="#catalogo" className="hover:text-[#c40506] transition-colors">Fardos</a>
-          <a href="#categorias" className="hover:text-[#c40506] transition-colors">Categorías</a>
-          <a href="#temporada" className="hover:text-[#c40506] transition-colors">Temporada</a>
-          <a href="#calidades" className="hover:text-[#c40506] transition-colors">Calidades</a>
-          <a href="#drops" className="hover:text-[#c40506] transition-colors">Último drop</a>
+          <Link href="/#catalogo" className="hover:text-[#c40506] transition-colors">
+            Catálogo
+          </Link>
+          <Link href="/#calidades" className="hover:text-[#c40506] transition-colors">
+            Niveles de Calidad
+          </Link>
+          <Link href="/#drops" className="hover:text-[#c40506] transition-colors flex items-center gap-1.5">
+            <span className="w-2 h-2 rounded-full bg-[#c40506] animate-pulse" />
+            Drops Semanales
+          </Link>
+          <Link href="/#como-comprar" className="hover:text-[#c40506] transition-colors">
+            Cómo Comprar
+          </Link>
+          <Link href="/#faqs" className="hover:text-[#c40506] transition-colors">
+            Preguntas Frecuentes
+          </Link>
         </div>
 
         {/* Right Actions */}
         <div className="flex items-center gap-4 text-xs font-semibold">
-          <a
-            href="#catalogo"
+          <Link
+            href="/#catalogo"
             className="hidden sm:flex items-center text-[#19150b]/80 hover:text-[#c40506] p-1.5"
-            aria-label="Buscar"
+            aria-label="Buscar en catálogo"
           >
             <Search className="w-4 h-4" />
-          </a>
+          </Link>
 
           <a
             href="https://wa.me/5491112345678"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1 text-[#19150b]/80 hover:text-[#c40506]"
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e7e0d2] text-[#19150b] hover:border-[#c40506] transition-colors"
           >
-            <User className="w-4 h-4" />
-            <span>Mi cuenta</span>
+            <MessageCircle className="w-3.5 h-3.5 text-[#25d366]" />
+            <span>Asesor</span>
           </a>
 
           <button
@@ -102,48 +113,48 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-[#e7e0d2] bg-[#f8f5ec] px-4 pt-3 pb-6 space-y-3 font-semibold text-sm">
-          <a
-            href="#catalogo"
+          <Link
+            href="/#catalogo"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#19150b] hover:text-[#c40506]"
           >
-            Fardos
-          </a>
-          <a
-            href="#categorias"
+            Catálogo de Fardos
+          </Link>
+          <Link
+            href="/#calidades"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#19150b] hover:text-[#c40506]"
           >
-            Categorías
-          </a>
-          <a
-            href="#temporada"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-[#19150b] hover:text-[#c40506]"
-          >
-            Temporada
-          </a>
-          <a
-            href="#calidades"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-[#19150b] hover:text-[#c40506]"
-          >
-            Calidades
-          </a>
-          <a
-            href="#drops"
+            Niveles de Calidad & Margen
+          </Link>
+          <Link
+            href="/#drops"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#c40506]"
           >
-            Último drop
-          </a>
+            Drops Semanales (Lotes Nuevos)
+          </Link>
+          <Link
+            href="/#como-comprar"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-[#19150b] hover:text-[#c40506]"
+          >
+            Cómo Comprar en 4 Pasos
+          </Link>
+          <Link
+            href="/#faqs"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-[#19150b] hover:text-[#c40506]"
+          >
+            Preguntas Frecuentes
+          </Link>
           <div className="pt-2 border-t border-[#e7e0d2]">
             <a
               href="https://wa.me/5491112345678"
               className="flex items-center gap-2 py-2 text-[#19150b] font-bold"
             >
-              <MessageCircle className="w-4 h-4 text-[#c40506]" />
-              <span>Asesoría por WhatsApp</span>
+              <MessageCircle className="w-4 h-4 text-[#25d366]" />
+              <span>Contactar Asesor por WhatsApp</span>
             </a>
           </div>
         </div>

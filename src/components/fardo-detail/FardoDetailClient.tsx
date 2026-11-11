@@ -45,8 +45,6 @@ export const FardoDetailClient: React.FC<FardoDetailClientProps> = ({
 
   const avgUnits = (fardo.estimatedUnitsMin + fardo.estimatedUnitsMax) / 2;
   const costPerUnit = Math.round(fardo.priceArs / avgUnits);
-  const suggestedResaleMin = Math.round(costPerUnit * 2.2);
-  const suggestedResaleMax = Math.round(costPerUnit * 3.5);
 
   const handleAddToCart = (product: FardoProduct, qty: number = 1) => {
     setCartItems((prev) => {
@@ -189,14 +187,6 @@ export const FardoDetailClient: React.FC<FardoDetailClientProps> = ({
                   </span>
                   <span className="text-[10px] text-[#686257] block">/prenda</span>
                 </div>
-              </div>
-
-              {/* Resale suggestion */}
-              <div className="pt-2 border-t border-[#e7e0d2] flex items-center justify-between text-xs text-[#686257]">
-                <span>Precio de reventa sugerido:</span>
-                <strong className="text-[#19150b]">
-                  {formatArs(suggestedResaleMin)} - {formatArs(suggestedResaleMax)}
-                </strong>
               </div>
             </div>
 
