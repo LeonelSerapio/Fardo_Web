@@ -6,29 +6,29 @@ export const HowItWorks: React.FC = () => {
   const getStepIcon = (index: number) => {
     switch (index) {
       case 0:
-        return <Search className="w-6 h-6 text-amber-500" />;
+        return <Search className="w-5 h-5 text-[#c40506]" />;
       case 1:
-        return <Calculator className="w-6 h-6 text-emerald-400" />;
+        return <Calculator className="w-5 h-5 text-[#19150b]" />;
       case 2:
-        return <CreditCard className="w-6 h-6 text-amber-500" />;
+        return <CreditCard className="w-5 h-5 text-[#c40506]" />;
       case 3:
-        return <Truck className="w-6 h-6 text-emerald-400" />;
+        return <Truck className="w-5 h-5 text-[#19150b]" />;
       default:
         return null;
     }
   };
 
   return (
-    <section id="como-comprar" className="py-20 bg-stone-900 border-b border-stone-800 text-stone-100">
+    <section id="como-comprar" className="py-20 bg-white border-b border-[#e7e0d2] text-[#19150b]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-3xl mx-auto mb-16">
-          <span className="text-amber-500 text-xs font-bold uppercase tracking-widest">
+          <span className="text-[#c40506] text-xs font-bold uppercase tracking-widest">
             Proceso de Compra Mayorista
           </span>
-          <h2 className="text-3xl sm:text-4xl font-black text-stone-100 mt-2">
+          <h2 className="font-serif-heading text-3xl sm:text-4xl font-bold text-[#19150b] mt-2">
             Comprar un Fardo Nunca Fue Tan Simple
           </h2>
-          <p className="text-stone-400 text-sm sm:text-base mt-3">
+          <p className="text-[#686257] text-sm sm:text-base mt-3">
             Sin intermediarios ni sorpresas en el pesaje. 4 pasos claros desde la elección del lote hasta la recepción en tu local o domicilio.
           </p>
         </div>
@@ -37,27 +37,27 @@ export const HowItWorks: React.FC = () => {
           {HOW_IT_WORKS_STEPS.map((step, idx) => (
             <div
               key={step.step}
-              className="bg-stone-950 p-6 rounded-2xl border border-stone-800 hover:border-stone-700 transition-colors flex flex-col justify-between relative group"
+              className="bg-[#f8f5ec] p-6 rounded-2xl border border-[#e7e0d2] hover:border-[#c40506]/40 transition-colors flex flex-col justify-between relative group"
             >
               <div>
                 <div className="flex items-center justify-between mb-4">
-                  <div className="w-12 h-12 rounded-xl bg-stone-900 flex items-center justify-center border border-stone-800 group-hover:scale-105 transition-transform">
+                  <div className="w-11 h-11 rounded-xl bg-white border border-[#e7e0d2] flex items-center justify-center group-hover:scale-105 transition-transform shadow-sm">
                     {getStepIcon(idx)}
                   </div>
-                  <span className="text-3xl font-black text-stone-800 group-hover:text-amber-500/40 transition-colors">
+                  <span className="font-serif-heading text-3xl font-black text-[#e7e0d2] group-hover:text-[#c40506]/30 transition-colors">
                     {step.step}
                   </span>
                 </div>
 
-                <h3 className="font-extrabold text-base text-stone-100 mb-2">
+                <h3 className="font-serif-heading font-bold text-base text-[#19150b] mb-2">
                   {step.title}
                 </h3>
-                <p className="text-xs text-stone-400 leading-relaxed">
+                <p className="text-xs text-[#686257] leading-relaxed">
                   {step.description}
                 </p>
               </div>
 
-              <div className="mt-6 pt-3 border-t border-stone-800/80 text-[11px] font-semibold text-amber-500">
+              <div className="mt-6 pt-3 border-t border-[#e7e0d2] text-[11px] font-semibold text-[#c40506]">
                 Paso verificado ✓
               </div>
             </div>

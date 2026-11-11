@@ -1,87 +1,132 @@
+'use client';
+
 import React from 'react';
-import { ArrowDown, CheckCircle2, ShieldCheck, Truck, Sparkles, TrendingUp } from 'lucide-react';
+import Image from 'next/image';
+import { ArrowRight, Play, CheckCircle2 } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-stone-950 via-stone-900 to-stone-950 text-stone-100 py-16 sm:py-24 border-b border-stone-800">
-      {/* Background ambient light */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-600/10 rounded-full blur-3xl pointer-events-none" />
+    <section className="bg-[#f8f5ec] text-[#19150b] pt-8 sm:pt-14 border-b border-[#e7e0d2]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center pb-12 sm:pb-16">
+          {/* Left Column (Copy & CTAs) - 6 cols */}
+          <div className="lg:col-span-6 space-y-6">
+            {/* Drop Badge */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#fde8e8] border border-[#fbd0d0] text-[#c40506] text-xs font-bold uppercase tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#c40506] animate-pulse" />
+              <span>Drop Primavera & Vintage Abierto</span>
+            </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="text-center max-w-3xl mx-auto space-y-6">
-          {/* Badge: Stock en vivo */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-stone-800/90 border border-stone-700 text-xs font-medium text-stone-300">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            <span className="font-semibold text-emerald-400">Stock activo en depósito</span>
-            <span className="text-stone-500">•</span>
-            <span>Despacho inmediato a todo el país</span>
+            {/* Headline in Serif */}
+            <h1 className="font-serif-heading text-4xl sm:text-5xl lg:text-6xl font-black text-[#19150b] leading-[1.08] tracking-tight">
+              Ropa con historia.{' '}
+              <span className="block mt-1">Margen para crecer.</span>
+            </h1>
+
+            {/* Subhead */}
+            <p className="text-base sm:text-lg text-[#686257] leading-relaxed max-w-xl font-normal">
+              Fardos seleccionados para tiendas, ferias y proyectos circulares. Sabés qué comprás: peso, mix, temporada y calidad garantizada.
+            </p>
+
+            {/* CTA Buttons */}
+            <div className="pt-2 flex flex-wrap items-center gap-5">
+              <a
+                href="#catalogo"
+                className="px-6 py-3.5 bg-[#c40506] hover:bg-[#a80405] text-white font-bold text-sm rounded-lg transition-colors flex items-center gap-2 shadow-sm"
+              >
+                <span>Explorar fardos</span>
+                <ArrowRight className="w-4 h-4" />
+              </a>
+
+              <a
+                href="#como-comprar"
+                className="inline-flex items-center gap-2 text-sm font-bold text-[#19150b] hover:text-[#c40506] transition-colors group"
+              >
+                <span>Cómo elegir</span>
+                <div className="w-6 h-6 rounded-full border border-[#19150b] group-hover:border-[#c40506] flex items-center justify-center">
+                  <Play className="w-2.5 h-2.5 fill-current ml-0.5" />
+                </div>
+              </a>
+            </div>
+
+            {/* Trust line */}
+            <div className="pt-3 flex items-center gap-2 text-xs text-[#686257] font-medium">
+              <CheckCircle2 className="w-4 h-4 text-[#c40506]" />
+              <span>Más de 1.800 compras mayoristas verificadas</span>
+            </div>
           </div>
 
-          {/* Main Title */}
-          <h1 className="text-4xl sm:text-6xl font-black tracking-tight text-stone-100 uppercase">
-            Ropa con historia.{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-amber-500 to-amber-600">
-              Margen para crecer.
-            </span>
-          </h1>
+          {/* Right Column (Warehouse Photo with Floating Badge) - 6 cols */}
+          <div className="lg:col-span-6 relative">
+            <div className="relative rounded-2xl overflow-hidden shadow-xl aspect-[4/3] w-full bg-[#eae3d2] border border-[#e7e0d2]">
+              <Image
+                src="/hero-warehouse.jpg"
+                alt="Depósito mayorista de fardos de ropa textil"
+                fill
+                priority
+                className="object-cover"
+                unoptimized
+              />
 
-          {/* Subtitle */}
-          <p className="text-lg sm:text-xl text-stone-300 font-normal leading-relaxed">
-            Plataforma mayorista B2B en Argentina de fardos de ropa vintage, circular y de primera selección.
-            Comprá por kilo con ficha técnica transparente, costo unitario exacto y garantía de satisfacción.
-          </p>
-
-          {/* Action CTAs */}
-          <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="#catalogo"
-              className="w-full sm:w-auto px-8 py-4 bg-amber-500 hover:bg-amber-400 text-stone-950 font-black text-sm uppercase tracking-wider rounded-xl transition-all shadow-lg shadow-amber-500/20 flex items-center justify-center gap-2 group"
-            >
-              <span>Ver Catálogo de Fardos</span>
-              <ArrowDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
-            </a>
-
-            <a
-              href="#calidades"
-              className="w-full sm:w-auto px-7 py-4 bg-stone-800/80 hover:bg-stone-800 border border-stone-700 text-stone-200 font-bold text-sm tracking-wide rounded-xl transition-colors flex items-center justify-center gap-2"
-            >
-              <TrendingUp className="w-4 h-4 text-amber-400" />
-              <span>Calculadora de Ganancia</span>
-            </a>
+              {/* Floating Stock Card - Figma exact */}
+              <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6 bg-white/95 backdrop-blur-sm rounded-xl p-4 sm:p-5 shadow-lg border border-[#e7e0d2] max-w-[220px]">
+                <span className="text-[10px] font-black uppercase tracking-wider text-[#c40506] block">
+                  Stock actualizado hoy
+                </span>
+                <span className="font-serif-heading text-2xl sm:text-3xl font-black text-[#19150b] block mt-0.5">
+                  124 fardos
+                </span>
+                <span className="text-[11px] text-[#686257] block mt-1">
+                  Listos para despacho en 24–48 h
+                </span>
+              </div>
+            </div>
           </div>
+        </div>
+      </div>
 
-          {/* Trust Metric Badges */}
-          <div className="pt-10 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 border-t border-stone-800/80 text-left">
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-stone-900/40 border border-stone-800">
-              <CheckCircle2 className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-bold text-sm text-stone-100">+1.800 Fardos</p>
-                <p className="text-xs text-stone-400">Despachados a revendedores</p>
-              </div>
+      {/* Bottom Feature Strip - Figma exact dark brown bar */}
+      <div className="bg-[#17140f] text-white py-6 sm:py-8 border-t border-[#29231b]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center sm:text-left">
+            {/* Col 1 */}
+            <div className="border-b sm:border-b-0 sm:border-r border-[#29231b] pb-4 sm:pb-0 pr-0 sm:pr-4">
+              <h3 className="font-serif-heading text-lg sm:text-xl font-bold text-white">
+                Desde 20 kg
+              </h3>
+              <p className="text-xs text-[#a8a196] mt-0.5">
+                Formatos para empezar
+              </p>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-stone-900/40 border border-stone-800">
-              <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-bold text-sm text-stone-100">7 Días Garantía</p>
-                <p className="text-xs text-stone-400">Satisfacción y calidad real</p>
-              </div>
+            {/* Col 2 */}
+            <div className="border-b sm:border-b-0 sm:border-r border-[#29231b] pb-4 sm:pb-0 pr-0 sm:pr-4">
+              <h3 className="font-serif-heading text-lg sm:text-xl font-bold text-white">
+                3 niveles
+              </h3>
+              <p className="text-xs text-[#a8a196] mt-0.5">
+                Original • 1ª • Premium
+              </p>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-stone-900/40 border border-stone-800">
-              <Truck className="w-5 h-5 text-amber-500 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-bold text-sm text-stone-100">Envíos Federales</p>
-                <p className="text-xs text-stone-400">Vía Cargo / Correo / Expresos</p>
-              </div>
+            {/* Col 3 */}
+            <div className="border-b sm:border-b-0 sm:border-r border-[#29231b] pb-4 sm:pb-0 pr-0 sm:pr-4">
+              <h3 className="font-serif-heading text-lg sm:text-xl font-bold text-white">
+                Ficha real
+              </h3>
+              <p className="text-xs text-[#a8a196] mt-0.5">
+                Peso y prendas estimadas
+              </p>
             </div>
 
-            <div className="flex items-start gap-3 p-3 rounded-lg bg-stone-900/40 border border-stone-800">
-              <Sparkles className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
-              <div>
-                <p className="font-bold text-sm text-stone-100">Ficha Clara</p>
-                <p className="text-xs text-stone-400">Kilos y prendas estimadas</p>
-              </div>
+            {/* Col 4 */}
+            <div>
+              <h3 className="font-serif-heading text-lg sm:text-xl font-bold text-white">
+                7 días
+              </h3>
+              <p className="text-xs text-[#a8a196] mt-0.5">
+                Garantía de recepción
+              </p>
             </div>
           </div>
         </div>
