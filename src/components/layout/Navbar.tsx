@@ -47,21 +47,21 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
 
         {/* Desktop Useful Navigation Links */}
         <div className="hidden lg:flex items-center gap-8 text-[13px] font-semibold text-[#19150b]/80">
-          <Link href="/#catalogo" className="hover:text-[#c40506] transition-colors">
-            Catálogo
+          <Link href="/fardos" className="hover:text-[#c40506] transition-colors">
+            Fardos
+          </Link>
+          <Link href="/categorias" className="hover:text-[#c40506] transition-colors">
+            Categorías
           </Link>
           <Link href="/#calidades" className="hover:text-[#c40506] transition-colors">
-            Niveles de Calidad
+            Calidades
           </Link>
           <Link href="/#drops" className="hover:text-[#c40506] transition-colors flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-[#c40506] animate-pulse" />
-            Drops Semanales
+            Último drop
           </Link>
           <Link href="/#como-comprar" className="hover:text-[#c40506] transition-colors">
             Cómo Comprar
-          </Link>
-          <Link href="/#faqs" className="hover:text-[#c40506] transition-colors">
-            Preguntas Frecuentes
           </Link>
         </div>
 
@@ -114,25 +114,32 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
       {mobileMenuOpen && (
         <div className="lg:hidden border-t border-[#e7e0d2] bg-[#f8f5ec] px-4 pt-3 pb-6 space-y-3 font-semibold text-sm">
           <Link
-            href="/#catalogo"
+            href="/fardos"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#19150b] hover:text-[#c40506]"
           >
-            Catálogo de Fardos
+            Fardos (Catálogo)
+          </Link>
+          <Link
+            href="/categorias"
+            onClick={() => setMobileMenuOpen(false)}
+            className="block py-2 text-[#19150b] hover:text-[#c40506]"
+          >
+            Categorías
           </Link>
           <Link
             href="/#calidades"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#19150b] hover:text-[#c40506]"
           >
-            Niveles de Calidad & Margen
+            Calidades
           </Link>
           <Link
             href="/#drops"
             onClick={() => setMobileMenuOpen(false)}
             className="block py-2 text-[#c40506]"
           >
-            Drops Semanales (Lotes Nuevos)
+            Último drop
           </Link>
           <Link
             href="/#como-comprar"
@@ -140,13 +147,6 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
             className="block py-2 text-[#19150b] hover:text-[#c40506]"
           >
             Cómo Comprar en 4 Pasos
-          </Link>
-          <Link
-            href="/#faqs"
-            onClick={() => setMobileMenuOpen(false)}
-            className="block py-2 text-[#19150b] hover:text-[#c40506]"
-          >
-            Preguntas Frecuentes
           </Link>
           <div className="pt-2 border-t border-[#e7e0d2]">
             <a
