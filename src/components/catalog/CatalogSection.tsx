@@ -1,49 +1,61 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect, useTransition } from 'react';
 import { FardoProduct } from '@/types';
 import { ProductCard } from './ProductCard';
-import { Search, Filter, SlidersHorizontal, Sparkles } from 'lucide-react';
+import { api } from '@/lib/api-client';
+import { Search, Filter, SlidersHorizontal, Sparkles, Loader2 } from 'lucide-react';
 
 interface CatalogSectionProps {
-  products: FardoProduct[];
+  initialProducts?: FardoProduct[];
   selectedCategory: string;
   onAddToCart: (product: FardoProduct) => void;
 }
 
 export const CatalogSection: React.FC<CatalogSectionProps> = ({
-  products,
+  initialProducts = [],
   selectedCategory,
   onAddToCart,
 }) => {
+  const [products, setProducts] = useState<FardoProduct[]>(initialProducts);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedQuality, setSelectedQuality] = useState<string>('all');
   const [sortBy, setSortBy] = useState<'popular' | 'price-asc' | 'price-desc' | 'weight'>('popular');
+  const [loading, setLoading] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
-  const filteredProducts = useMemo(() => {
-    return products
-      .filter((p) => {
-        if (selectedCategory !== 'all' && p.category !== selectedCategory) {
-          return false;
+  useEffect(() => {
+    let isMounted = true;
+    const fetchFiltered = async () => {
+      setLoading(true);
+      try {
+        const data = await api.getFardos({
+          category: selectedCategory,
+          quality: selectedQuality,
+          search: searchQuery,
+          sortBy,
+        });
+        if (isMounted) {
+          startTransition(() => {
+            setProducts(data);
+          });
         }
-        if (selectedQuality !== 'all' && p.quality !== selectedQuality) {
-          return false;
-        }
-        if (searchQuery.trim()) {
-          const q = searchQuery.toLowerCase();
-          const matchTitle = p.title.toLowerCase().includes(q);
-          const matchHighlights = p.highlights.some((h) => h.toLowerCase().includes(q));
-          if (!matchTitle && !matchHighlights) return false;
-        }
-        return true;
-      })
-      .sort((a, b) => {
-        if (sortBy === 'price-asc') return a.priceArs - b.priceArs;
-        if (sortBy === 'price-desc') return b.priceArs - a.priceArs;
-        if (sortBy === 'weight') return a.weightKg - b.weightKg;
-        return (b.isPopular ? 1 : 0) - (a.isPopular ? 1 : 0);
-      });
-  }, [products, selectedCategory, selectedQuality, searchQuery, sortBy]);
+      } catch (err) {
+        console.error('Error fetching fardos from API handler:', err);
+      } finally {
+        if (isMounted) setLoading(false);
+      }
+    };
+
+    const timer = setTimeout(() => {
+      fetchFiltered();
+    }, 250);
+
+    return () => {
+      isMounted = false;
+      clearTimeout(timer);
+    };
+  }, [selectedCategory, selectedQuality, searchQuery, sortBy]);
 
   return (
     <section id="catalogo" className="py-16 bg-[#f8f5ec] text-[#19150b]">
@@ -121,20 +133,21 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
           </div>
         </div>
 
-        {/* Results Counter */}
+        {/* Results Counter & Loading status */}
         <div className="mb-6 flex items-center justify-between text-xs text-[#686257]">
-          <span>
-            Mostrando <strong className="text-[#19150b]">{filteredProducts.length}</strong> lotes con stock para despacho
+          <span className="flex items-center gap-2">
+            Mostrando <strong className="text-[#19150b]">{products.length}</strong> lotes disponibles
+            {(loading || isPending) && <Loader2 className="w-3.5 h-3.5 animate-spin text-[#c40506]" />}
           </span>
           {selectedCategory !== 'all' && (
-            <span className="text-[#c40506] font-semibold">Filtro de rubro aplicado</span>
+            <span className="text-[#c40506] font-semibold">Filtro de rubro activo: {selectedCategory}</span>
           )}
         </div>
 
         {/* Grid */}
-        {filteredProducts.length > 0 ? (
+        {products.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -145,10 +158,10 @@ export const CatalogSection: React.FC<CatalogSectionProps> = ({
         ) : (
           <div className="bg-white border border-[#e7e0d2] rounded-2xl p-12 text-center max-w-lg mx-auto space-y-4">
             <p className="text-[#19150b] font-bold text-base">
-              No encontramos fardos que coincidan con los filtros
+              No encontramos fardos con los filtros solicitados
             </p>
             <p className="text-xs text-[#686257]">
-              Probá limpiando la búsqueda o cambiando el nivel de calidad seleccionado.
+              Probá limpiando la búsqueda o cambiando el nivel de calidad.
             </p>
             <button
               onClick={() => {

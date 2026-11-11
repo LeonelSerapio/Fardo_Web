@@ -52,7 +52,7 @@ export default function HomePage() {
   const totalCartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
   return (
-    <div className="min-h-screen flex flex-col bg-stone-950 text-stone-100">
+    <div className="min-h-screen flex flex-col bg-[#f8f5ec] text-[#19150b]">
       <Navbar
         cartCount={totalCartCount}
         onOpenCart={() => setIsCartOpen(true)}
@@ -73,7 +73,7 @@ export default function HomePage() {
         />
 
         <CatalogSection
-          products={MOCK_FARDOS}
+          initialProducts={MOCK_FARDOS}
           selectedCategory={selectedCategory}
           onAddToCart={handleAddToCart}
         />

@@ -1,9 +1,10 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { FardoProduct } from '@/types';
 import { formatArs } from '@/lib/formatters';
-import { X, Trash2, MessageCircle, Scale, Layers, ShoppingBag, ShieldCheck } from 'lucide-react';
+import { api } from '@/lib/api-client';
+import { X, Trash2, MessageCircle, Scale, Layers, ShoppingBag, ShieldCheck, Loader2 } from 'lucide-react';
 
 interface CartItem {
   product: FardoProduct;
@@ -25,6 +26,8 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
   onUpdateQuantity,
   onRemoveItem,
 }) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   if (!isOpen) return null;
 
   const totalKg = items.reduce((sum, item) => sum + item.product.weightKg * item.quantity, 0);
@@ -41,15 +44,30 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
     0
   );
 
-  const orderLines = items.map(
-    (i) => `• ${i.quantity}x ${i.product.title} (${i.product.weightKg}kg) = ${formatArs(i.product.priceArs * i.quantity)}`
-  );
+  const handleCheckoutWhatsApp = async () => {
+    try {
+      setIsSubmitting(true);
+      const quote = await api.createOrderQuote({
+        items: items.map((i) => ({ productId: i.product.id, quantity: i.quantity })),
+      });
 
-  const whatsappMessage = encodeURIComponent(
-    `Hola Fardo Club, quiero confirmar el siguiente pedido mayorista:\n\n${orderLines.join(
-      '\n'
-    )}\n\n*Total estimado:* ${formatArs(totalPriceArs)} ARS\n*Peso total:* ${totalKg} kg (~${totalMinUnits}-${totalMaxUnits} prendas)\n\n¿Me indican los datos para coordinar el pago por transferencia y despacho?`
-  );
+      const orderLines = quote.items.map(
+        (i) => `• ${i.quantity}x ${i.product.title} (${i.product.weightKg}kg) = ${formatArs(i.subtotalArs)}`
+      );
+
+      const message = encodeURIComponent(
+        `Hola Fardo Club, quiero confirmar mi cotización mayorista [${quote.orderId}]:\n\n${orderLines.join(
+          '\n'
+        )}\n\n*Total:* ${formatArs(quote.totalArs)} ARS\n*Peso total:* ${quote.totalWeightKg} kg (~${quote.totalEstimatedUnitsMin}-${quote.totalEstimatedUnitsMax} prendas)\n\n¿Me indican los datos bancarios para coordinar la transferencia y despacho?`
+      );
+
+      window.open(`https://wa.me/5491112345678?text=${message}`, '_blank');
+    } catch (err: any) {
+      alert(`Error al generar cotización: ${err.message}`);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -169,15 +187,20 @@ export const CartDrawer: React.FC<CartDrawerProps> = ({
                 </div>
               </div>
 
-              <a
-                href={`https://wa.me/5491112345678?text=${whatsappMessage}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full py-3.5 px-4 bg-[#c40506] hover:bg-[#a80405] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
+              <button
+                onClick={handleCheckoutWhatsApp}
+                disabled={isSubmitting}
+                className="w-full py-3.5 px-4 bg-[#c40506] hover:bg-[#a80405] disabled:opacity-50 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
               >
-                <MessageCircle className="w-4 h-4" />
-                <span>Confirmar Pedido por WhatsApp</span>
-              </a>
+                {isSubmitting ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <MessageCircle className="w-4 h-4" />
+                )}
+                <span>
+                  {isSubmitting ? 'Registrando Cotización...' : 'Confirmar Pedido por WhatsApp'}
+                </span>
+              </button>
 
               <p className="text-[10px] text-center text-[#686257] flex items-center justify-center gap-1">
                 <ShieldCheck className="w-3.5 h-3.5 text-[#c40506]" />

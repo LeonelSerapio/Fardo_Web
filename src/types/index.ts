@@ -49,3 +49,39 @@ export interface FaqItem {
   question: string;
   answer: string;
 }
+
+export interface FardoQueryParams {
+  category?: string;
+  quality?: string;
+  search?: string;
+  sortBy?: 'popular' | 'price-asc' | 'price-desc' | 'weight';
+  limit?: number;
+  offset?: number;
+}
+
+export interface OrderItemDto {
+  productId: string;
+  quantity: number;
+}
+
+export interface CreateOrderDto {
+  items: OrderItemDto[];
+  customerName?: string;
+  customerPhone?: string;
+  shippingCity?: string;
+}
+
+export interface OrderQuoteResponse {
+  orderId: string;
+  items: Array<{
+    product: FardoProduct;
+    quantity: number;
+    subtotalArs: number;
+  }>;
+  totalArs: number;
+  totalWeightKg: number;
+  totalEstimatedUnitsMin: number;
+  totalEstimatedUnitsMax: number;
+  status: 'pending_confirmation';
+  createdAt: string;
+}
