@@ -8,6 +8,13 @@
       "when": 1795579632022,
       "tag": "0000_chunky_bishop",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1795582005093,
+      "tag": "0001_high_dexter_bennett",
+      "breakpoints": true
     }
   ]
 }

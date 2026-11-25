@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { isAdminRequest } from '@/lib/admin-auth';
 import { adminRepository } from '@/lib/repositories/admin-repository';
 import { isDatabaseConfigured } from '@/lib/env';
 import { AdjustStockDto } from '@/types';
 
 export async function GET(request: NextRequest) {
-  if (!isAdminAuthenticated(request)) {
+  if (!(await isAdminRequest(request))) {
     return NextResponse.json({ success: false, error: 'No autorizado.' }, { status: 401 });
   }
   if (!isDatabaseConfigured()) {
@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  if (!isAdminAuthenticated(request)) {
+  if (!(await isAdminRequest(request))) {
     return NextResponse.json({ success: false, error: 'No autorizado.' }, { status: 401 });
   }
   if (!isDatabaseConfigured()) {

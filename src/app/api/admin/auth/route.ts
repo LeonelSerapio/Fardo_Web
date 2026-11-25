@@ -1,17 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest, NextResponse, connection } from 'next/server';
 import {
   ADMIN_COOKIE_NAME,
   createSessionToken,
-  isAdminAuthenticated,
+  isAdminRequest,
   verifyAdminSecret,
 } from '@/lib/admin-auth';
 import { getServerEnv, isDatabaseConfigured } from '@/lib/env';
 
 export async function GET(request: NextRequest) {
+  await connection();
   return NextResponse.json({
     success: true,
     data: {
-      authenticated: isAdminAuthenticated(request),
+      authenticated: await isAdminRequest(request),
       databaseConfigured: isDatabaseConfigured(),
     },
   });

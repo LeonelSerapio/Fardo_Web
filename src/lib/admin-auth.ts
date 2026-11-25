@@ -1,6 +1,7 @@
 import crypto from 'crypto';
 import { NextRequest } from 'next/server';
 import { getServerEnv } from '@/lib/env';
+import { getUserFromRequest } from '@/lib/auth';
 
 export const ADMIN_COOKIE_NAME = 'fardo_admin_session';
 
@@ -37,4 +38,14 @@ export function isAdminAuthenticated(request: NextRequest): boolean {
   }
 
   return false;
+}
+
+/**
+ * Unified admin check: allows either a logged-in user with role='admin'
+ * OR the fallback ADMIN_SECRET header/cookie.
+ */
+export async function isAdminRequest(request: NextRequest): Promise<boolean> {
+  if (isAdminAuthenticated(request)) return true;
+  const user = await getUserFromRequest(request);
+  return user?.role === 'admin';
 }

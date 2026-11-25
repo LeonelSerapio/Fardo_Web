@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
+import { getUserFromRequest } from '@/lib/auth';
 import { CreateOrderDto } from '@/types';
 
 export async function POST(request: NextRequest) {
@@ -16,7 +17,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const quote = await fardoRepository.createQuote(body);
+    const user = await getUserFromRequest(request).catch(() => null);
+
+    const quote = await fardoRepository.createQuote({
+      ...body,
+      userId: user?.id ?? null,
+      customerName: body.customerName || user?.fullName || undefined,
+      customerPhone: body.customerPhone || user?.phone || undefined,
+      shippingCity: body.shippingCity || user?.shippingCity || undefined,
+    });
 
     return NextResponse.json(
       {

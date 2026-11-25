@@ -6,6 +6,40 @@ export type StockMovementType = 'restock' | 'reserve' | 'release' | 'sale' | 'ad
 
 export type OrderStatus = 'pending_confirmation' | 'confirmed' | 'shipped' | 'cancelled';
 
+export type UserRole = 'customer' | 'admin';
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  role: UserRole;
+  fullName: string;
+  businessName: string | null;
+  phone: string | null;
+  shippingCity: string | null;
+  createdAt: string;
+}
+
+export interface RegisterDto {
+  email: string;
+  password: string;
+  fullName: string;
+  businessName?: string;
+  phone?: string;
+  shippingCity?: string;
+}
+
+export interface LoginDto {
+  email: string;
+  password: string;
+}
+
+export interface UpdateProfileDto {
+  fullName?: string;
+  businessName?: string | null;
+  phone?: string | null;
+  shippingCity?: string | null;
+}
+
 export interface QualityTier {
   id: QualityTierId;
   name: string;
@@ -163,6 +197,7 @@ export interface OrderItemDto {
 
 export interface CreateOrderDto {
   items: OrderItemDto[];
+  userId?: string | null;
   customerName?: string;
   customerPhone?: string;
   shippingCity?: string;

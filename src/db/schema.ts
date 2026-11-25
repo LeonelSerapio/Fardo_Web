@@ -32,6 +32,43 @@ export const orderStatusEnum = pgEnum('order_status', [
   'cancelled',
 ]);
 
+export const userRoleEnum = pgEnum('user_role', ['customer', 'admin']);
+
+export const users = pgTable(
+  'users',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    email: varchar('email', { length: 180 }).notNull().unique(),
+    passwordHash: text('password_hash').notNull(),
+    role: userRoleEnum('role').notNull().default('customer'),
+    fullName: varchar('full_name', { length: 160 }).notNull(),
+    businessName: varchar('business_name', { length: 160 }),
+    phone: varchar('phone', { length: 64 }),
+    shippingCity: varchar('shipping_city', { length: 160 }),
+    isActive: boolean('is_active').notNull().default(true),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp('updated_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [index('users_email_idx').on(table.email)]
+);
+
+export const sessions = pgTable(
+  'sessions',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    userId: uuid('user_id')
+      .notNull()
+      .references(() => users.id, { onDelete: 'cascade' }),
+    tokenHash: varchar('token_hash', { length: 64 }).notNull().unique(),
+    expiresAt: timestamp('expires_at', { withTimezone: true }).notNull(),
+    createdAt: timestamp('created_at', { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index('sessions_user_idx').on(table.userId),
+    index('sessions_expires_idx').on(table.expiresAt),
+  ]
+);
+
 export const categories = pgTable('categories', {
   id: varchar('id', { length: 64 }).primaryKey(),
   slug: varchar('slug', { length: 64 }).notNull().unique(),
@@ -98,8 +135,7 @@ export const orders = pgTable(
   {
     id: uuid('id').defaultRandom().primaryKey(),
     orderCode: varchar('order_code', { length: 48 }).notNull().unique(),
-    // Reserved for future user authentication integration
-    userId: varchar('user_id', { length: 128 }),
+    userId: uuid('user_id').references(() => users.id, { onDelete: 'set null' }),
     customerName: varchar('customer_name', { length: 160 }),
     customerPhone: varchar('customer_phone', { length: 64 }),
     shippingCity: varchar('shipping_city', { length: 160 }),
@@ -193,7 +229,23 @@ export const fardosRelations = relations(fardos, ({ one, many }) => ({
   stockMovements: many(stockMovements),
 }));
 
-export const ordersRelations = relations(orders, ({ many }) => ({
+export const usersRelations = relations(users, ({ many }) => ({
+  sessions: many(sessions),
+  orders: many(orders),
+}));
+
+export const sessionsRelations = relations(sessions, ({ one }) => ({
+  user: one(users, {
+    fields: [sessions.userId],
+    references: [users.id],
+  }),
+}));
+
+export const ordersRelations = relations(orders, ({ one, many }) => ({
+  user: one(users, {
+    fields: [orders.userId],
+    references: [users.id],
+  }),
   items: many(orderItems),
   stockMovements: many(stockMovements),
 }));

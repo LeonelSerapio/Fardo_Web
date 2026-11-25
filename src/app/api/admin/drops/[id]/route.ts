@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { isAdminRequest } from '@/lib/admin-auth';
 import { adminRepository } from '@/lib/repositories/admin-repository';
 import { isDatabaseConfigured } from '@/lib/env';
 import { UpdateDropDto } from '@/types';
@@ -9,7 +9,7 @@ interface RouteContext {
 }
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  if (!isAdminAuthenticated(request)) {
+  if (!(await isAdminRequest(request))) {
     return NextResponse.json({ success: false, error: 'No autorizado.' }, { status: 401 });
   }
   if (!isDatabaseConfigured()) {
@@ -31,7 +31,7 @@ export async function PATCH(request: NextRequest, context: RouteContext) {
 }
 
 export async function DELETE(request: NextRequest, context: RouteContext) {
-  if (!isAdminAuthenticated(request)) {
+  if (!(await isAdminRequest(request))) {
     return NextResponse.json({ success: false, error: 'No autorizado.' }, { status: 401 });
   }
   if (!isDatabaseConfigured()) {

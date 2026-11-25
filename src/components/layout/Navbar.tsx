@@ -1,8 +1,9 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Search, ShoppingBag, User, Menu, X, MessageCircle } from 'lucide-react';
+import { AuthUser } from '@/types';
 
 interface NavbarProps {
   cartCount?: number;
@@ -11,6 +12,22 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    let active = true;
+    fetch('/api/auth/me')
+      .then((res) => (res.ok ? res.json() : null))
+      .then((json) => {
+        if (active && json?.success) {
+          setCurrentUser(json.data?.user ?? null);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <header className="sticky top-0 z-50 bg-[#f8f5ec]/95 backdrop-blur-md border-b border-[#e7e0d2] text-[#19150b]">
@@ -85,6 +102,14 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
             <span>Asesor</span>
           </a>
 
+          <Link
+            href={currentUser ? '/cuenta' : '/login'}
+            className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-[#e7e0d2] text-[#19150b] hover:border-[#c40506] transition-colors"
+          >
+            <User className="w-3.5 h-3.5 text-[#c40506]" />
+            <span>{currentUser ? currentUser.fullName.split(' ')[0] : 'Ingresar'}</span>
+          </Link>
+
           <button
             onClick={onOpenCart}
             type="button"
@@ -148,7 +173,15 @@ export const Navbar: React.FC<NavbarProps> = ({ cartCount = 0, onOpenCart }) => 
           >
             Cómo Comprar en 4 Pasos
           </Link>
-          <div className="pt-2 border-t border-[#e7e0d2]">
+          <div className="pt-2 border-t border-[#e7e0d2] space-y-2">
+            <Link
+              href={currentUser ? '/cuenta' : '/login'}
+              onClick={() => setMobileMenuOpen(false)}
+              className="flex items-center gap-2 py-2 text-[#19150b] font-bold hover:text-[#c40506]"
+            >
+              <User className="w-4 h-4 text-[#c40506]" />
+              <span>{currentUser ? `Mi Cuenta (${currentUser.fullName.split(' ')[0]})` : 'Ingresar / Crear Cuenta'}</span>
+            </Link>
             <a
               href="https://wa.me/5491112345678"
               className="flex items-center gap-2 py-2 text-[#19150b] font-bold"

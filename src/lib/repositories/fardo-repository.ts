@@ -218,6 +218,7 @@ export class NeonFardoRepository implements IFardoRepository {
         .insert(orders)
         .values({
           orderCode,
+          userId: dto.userId || null,
           customerName: dto.customerName?.trim() || null,
           customerPhone: dto.customerPhone?.trim() || null,
           shippingCity: dto.shippingCity?.trim() || null,

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { isAdminAuthenticated } from '@/lib/admin-auth';
+import { isAdminRequest } from '@/lib/admin-auth';
 import { adminRepository } from '@/lib/repositories/admin-repository';
 import { isDatabaseConfigured } from '@/lib/env';
 import { OrderStatus } from '@/types';
@@ -11,7 +11,7 @@ interface RouteContext {
 const VALID_STATUSES: OrderStatus[] = ['pending_confirmation', 'confirmed', 'shipped', 'cancelled'];
 
 export async function PATCH(request: NextRequest, context: RouteContext) {
-  if (!isAdminAuthenticated(request)) {
+  if (!(await isAdminRequest(request))) {
     return NextResponse.json({ success: false, error: 'No autorizado.' }, { status: 401 });
   }
   if (!isDatabaseConfigured()) {
