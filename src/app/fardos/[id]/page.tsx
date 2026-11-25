@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+import { connection } from 'next/server';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
 import { FardoDetailClient } from '@/components/fardo-detail/FardoDetailClient';
 import { formatArs } from '@/lib/formatters';
@@ -10,6 +11,7 @@ interface PageProps {
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  await connection();
   const { id } = await params;
   const fardo = await fardoRepository.findById(id);
 
@@ -26,18 +28,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export async function generateStaticParams() {
-  const { items } = await fardoRepository.findMany({ limit: 50 });
-  return items.map((fardo) => ({
-    id: fardo.id,
-  }));
-}
-
 async function FardoDetailContent({
   paramsPromise,
 }: {
   paramsPromise: Promise<{ id: string }>;
 }) {
+  await connection();
   const { id } = await paramsPromise;
   const fardo = await fardoRepository.findById(id);
 

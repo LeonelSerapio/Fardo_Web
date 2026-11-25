@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import { connection } from 'next/server';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
 import { CatalogPageClient } from '@/components/catalog-page/CatalogPageClient';
 
@@ -18,6 +19,7 @@ async function FardosCatalogContent({
 }: {
   searchParamsPromise: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
+  await connection();
   const resolvedParams = await searchParamsPromise;
 
   const categoryParam = typeof resolvedParams.categoria === 'string'

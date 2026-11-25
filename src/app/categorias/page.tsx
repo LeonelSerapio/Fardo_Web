@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { Metadata } from 'next';
+import { connection } from 'next/server';
 import Link from 'next/link';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
 import { Navbar } from '@/components/layout/Navbar';
@@ -25,7 +26,8 @@ export const metadata: Metadata = {
     'Descubrí todos los rubros textiles clasificados: Vintage & 90s Streetwear, Abrigo de Temporada, Denim Hombre, Mujer y Niños. Fardos cerrados con entrega en todo el país.',
 };
 
-export default async function CategoriasPage() {
+async function CategoriasContent() {
+  await connection();
   const [categories, { items: allFardos }] = await Promise.all([
     fardoRepository.findCategories(),
     fardoRepository.findMany({ limit: 50 }),
@@ -166,5 +168,19 @@ export default async function CategoriasPage() {
 
       <Footer />
     </div>
+  );
+}
+
+export default function CategoriasPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-screen bg-[#f8f5ec] flex items-center justify-center text-sm text-[#686257]">
+          Cargando categorías...
+        </div>
+      }
+    >
+      <CategoriasContent />
+    </Suspense>
   );
 }

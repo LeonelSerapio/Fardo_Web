@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, connection } from 'next/server';
 import { fardoRepository } from '@/lib/repositories/fardo-repository';
 
 export async function GET() {
+  await connection();
   try {
     const categories = await fardoRepository.findCategories();
 
