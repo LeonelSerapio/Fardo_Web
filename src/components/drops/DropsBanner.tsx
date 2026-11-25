@@ -2,15 +2,26 @@
 
 import React, { useState } from 'react';
 import { Bell, Flame, MessageCircle, CheckCircle2, Clock } from 'lucide-react';
+import { api } from '@/lib/api-client';
 
 export const DropsBanner: React.FC = () => {
   const [phone, setPhone] = useState('');
   const [subscribed, setSubscribed] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubscribe = (e: React.FormEvent) => {
+  const handleSubscribe = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (phone.trim()) {
+    if (!phone.trim() || submitting) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      await api.subscribeToDrop(phone.trim());
       setSubscribed(true);
+    } catch (err: unknown) {
+      setError(err instanceof Error ? err.message : 'No se pudo registrar tu número.');
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -83,12 +94,17 @@ export const DropsBanner: React.FC = () => {
                     />
                   </div>
 
+                  {error && (
+                    <p className="text-xs text-[#c40506] font-medium">{error}</p>
+                  )}
+
                   <button
                     type="submit"
-                    className="w-full py-3 px-4 bg-[#c40506] hover:bg-[#a80405] text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
+                    disabled={submitting}
+                    className="w-full py-3 px-4 bg-[#c40506] hover:bg-[#a80405] disabled:opacity-60 text-white font-bold text-xs uppercase tracking-wider rounded-lg transition-colors flex items-center justify-center gap-2 shadow-sm"
                   >
                     <MessageCircle className="w-4 h-4" />
-                    <span>Unirme a la Lista de Alertas</span>
+                    <span>{submitting ? 'Registrando...' : 'Unirme a la Lista de Alertas'}</span>
                   </button>
                 </form>
               )}
